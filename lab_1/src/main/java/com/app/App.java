@@ -53,5 +53,7 @@ public class App {
                     System.out.println("Something went wrong");
             }
         }
+
+        in.close();
     }
 }

@@ -11,26 +11,26 @@ public class Container {
 
     public void add(int element) {
         if (size == elements.length) {
-            int[] newArray = new int[elements.length * 2];
-            System.arraycopy(elements, 0, newArray, 0, elements.length);
-            elements = newArray;
+            resize();
         }
 
         elements[size++] = element;
     }
 
-    public int get(int index) {
+    private void indexOutOfBoundsCheck(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index out of bounds");
         }
+    }
+
+    public int get(int index) {
+        indexOutOfBoundsCheck(index);
 
         return elements[index];
     }
 
     public int remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index out of bounds");
-        }
+        indexOutOfBoundsCheck(index);
 
         int removedElement = elements[index];
         for (int i = index; i < size - 1; i++) {
@@ -48,5 +48,11 @@ public class Container {
 
     public int size() {
         return size;
+    }
+
+    private void resize() {
+        int[] newElements = new int[elements.length * 2];
+        System.arraycopy(elements, 0, newElements, 0, size);
+        elements = newElements;
     }
 }
