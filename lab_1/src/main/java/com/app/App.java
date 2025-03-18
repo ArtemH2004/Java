@@ -2,7 +2,25 @@ package com.app;
 
 import java.util.Scanner;
 
+/**
+ * Основной класс для взаимодействия с пользователем.
+ * Позволяет добавлять, удалять, получать элементы контейнера, а также очищать
+ * его.
+ */
 public class App {
+    /**
+     * Конструктор по умолчанию.
+     * Создает экземпляр класса App.
+     */
+    public App() {
+        // Конструктор по умолчанию
+    }
+
+    /**
+     * Точка входа в программу.
+     *
+     * @param args аргументы командной строки (не используются)
+     */
     public static void main(String[] args) {
         Container container = new Container();
         Scanner in = new Scanner(System.in);
