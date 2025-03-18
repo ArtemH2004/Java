@@ -41,6 +41,11 @@ public class Container {
         return removedElement;
     }
 
+    public void clear() {
+        elements = new int[10];
+        size = 0;
+    }
+
     public int size() {
         return size;
     }
