@@ -3,9 +3,10 @@ package com.app;
 public class Container {
     private int[] elements;
     private int size;
+    private static final int INITIAL_CAPACITY = 10;
 
     public Container() {
-        this.elements = new int[10];
+        this.elements = new int[INITIAL_CAPACITY];
         this.size = 0;
     }
 
@@ -42,7 +43,7 @@ public class Container {
     }
 
     public void clear() {
-        elements = new int[10];
+        elements = new int[INITIAL_CAPACITY];
         size = 0;
     }
 
