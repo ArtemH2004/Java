@@ -2,10 +2,24 @@ package com.app;
 
 import java.util.Map;
 
+/**
+ * Класс для вычисления математических выражений.
+ * Поддерживает базовые арифметические операции, функции и переменные.
+ */
 public class ExpressionEvaluator {
     private static final String OPERATORS = "+-*/^";
     private static final String FUNCTIONS = "sin|cos|tan|sqrt|log|exp";
 
+    /**
+     * Вычисляет значение математического выражения.
+     *
+     * @param expression Выражение для вычисления.
+     * @param variables  Карта переменных и их значений.
+     * @return Результат вычисления выражения.
+     * @throws IllegalArgumentException Если встречается неизвестная переменная или
+     *                                  функция.
+     * @throws ArithmeticException      Если происходит деление на ноль.
+     */
     public double evaluate(String expression, Map<String, Double> variables) {
         Stack<Double> numbers = new Stack<>();
         Stack<Character> operators = new Stack<>();
@@ -15,7 +29,8 @@ public class ExpressionEvaluator {
 
             if (Character.isDigit(c) || c == '.') {
                 StringBuilder numBuilder = new StringBuilder();
-                while (i < expression.length() && (Character.isDigit(expression.charAt(i)) || expression.charAt(i) == '.')) {
+                while (i < expression.length()
+                        && (Character.isDigit(expression.charAt(i)) || expression.charAt(i) == '.')) {
                     numBuilder.append(expression.charAt(i++));
                 }
                 i--;
@@ -27,22 +42,25 @@ public class ExpressionEvaluator {
                 while (i < expression.length() && Character.isLetter(expression.charAt(i))) {
                     nameBuilder.append(expression.charAt(i++));
                 }
-                i--; 
+                i--;
                 String name = nameBuilder.toString();
                 if (name.matches(FUNCTIONS)) {
                     i++;
                     StringBuilder argBuilder = new StringBuilder();
-                    int bracketCount = 1; 
+                    int bracketCount = 1;
                     while (i < expression.length() && bracketCount > 0) {
                         char ch = expression.charAt(i++);
-                        if (ch == '(') bracketCount++;
-                        if (ch == ')') bracketCount--;
-                        if (bracketCount > 0) argBuilder.append(ch);
+                        if (ch == '(')
+                            bracketCount++;
+                        if (ch == ')')
+                            bracketCount--;
+                        if (bracketCount > 0)
+                            argBuilder.append(ch);
                     }
                     double arg = evaluate(argBuilder.toString(), variables);
-                    numbers.push(applyFunction(name, arg)); 
+                    numbers.push(applyFunction(name, arg));
                 } else if (variables.containsKey(name)) {
-                    numbers.push(variables.get(name)); 
+                    numbers.push(variables.get(name));
                 } else {
                     throw new IllegalArgumentException("Unknown variable or function: " + name);
                 }
@@ -70,10 +88,22 @@ public class ExpressionEvaluator {
         return numbers.pop();
     }
 
+    /**
+     * Проверяет, является ли символ оператором.
+     *
+     * @param c Символ для проверки.
+     * @return true, если символ является оператором, иначе false.
+     */
     private boolean isOperator(char c) {
         return OPERATORS.indexOf(c) != -1;
     }
 
+    /**
+     * Возвращает приоритет оператора.
+     *
+     * @param operator Оператор.
+     * @return Приоритет оператора.
+     */
     private int precedence(char operator) {
         switch (operator) {
             case '+':
@@ -89,6 +119,16 @@ public class ExpressionEvaluator {
         }
     }
 
+    /**
+     * Применяет оператор к двум операндам.
+     *
+     * @param operator Оператор.
+     * @param b        Второй операнд.
+     * @param a        Первый операнд.
+     * @return Результат операции.
+     * @throws IllegalArgumentException Если оператор неизвестен.
+     * @throws ArithmeticException      Если происходит деление на ноль.
+     */
     private double applyOperation(char operator, double b, double a) {
         switch (operator) {
             case '+':
@@ -98,7 +138,8 @@ public class ExpressionEvaluator {
             case '*':
                 return a * b;
             case '/':
-                if (b == 0) throw new ArithmeticException("Division by zero");
+                if (b == 0)
+                    throw new ArithmeticException("Division by zero");
                 return a / b;
             case '^':
                 return Math.pow(a, b);
@@ -107,6 +148,14 @@ public class ExpressionEvaluator {
         }
     }
 
+    /**
+     * Применяет функцию к аргументу.
+     *
+     * @param name Имя функции.
+     * @param arg  Аргумент функции.
+     * @return Результат применения функции.
+     * @throws IllegalArgumentException Если функция неизвестна.
+     */
     private double applyFunction(String name, double arg) {
         switch (name) {
             case "sin":

@@ -6,7 +6,24 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Основной класс приложения для вычисления математических выражений.
+ * Поддерживает переменные, функции и базовые арифметические операции.
+ */
 public class App {
+    /**
+     * Конструктор по умолчанию.
+     * Создает экземпляр класса App.
+     */
+    public App() {
+        // Конструктор по умолчанию
+    }
+
+    /**
+     * Точка входа в программу.
+     *
+     * @param args Аргументы командной строки (не используются).
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter expression: ");
@@ -18,7 +35,7 @@ public class App {
             Pattern variablePattern = Pattern.compile("\\b[a-zA-Z]+\\b");
             Matcher matcher = variablePattern.matcher(expression);
 
-            String[] functions = {"sin", "cos", "tan", "sqrt", "log", "exp"};
+            String[] functions = { "sin", "cos", "tan", "sqrt", "log", "exp" };
 
             while (matcher.find()) {
                 String variable = matcher.group();
