@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class ExpressionEvaluator {
     private static final String OPERATORS = "+-*/^";
-    private static final String FUNCTIONS = "sincostansqrtlogexp";
+    private static final String FUNCTIONS = "sin|cos|tan|sqrt|log|exp";
 
     public double evaluate(String expression, Map<String, Double> variables) {
         Stack<Double> numbers = new Stack<>();
@@ -27,13 +27,12 @@ public class ExpressionEvaluator {
                 while (i < expression.length() && Character.isLetter(expression.charAt(i))) {
                     nameBuilder.append(expression.charAt(i++));
                 }
-                i--;
-
+                i--; 
                 String name = nameBuilder.toString();
-                if (FUNCTIONS.contains(name)) {
-                    i++; 
+                if (name.matches(FUNCTIONS)) {
+                    i++;
                     StringBuilder argBuilder = new StringBuilder();
-                    int bracketCount = 1;
+                    int bracketCount = 1; 
                     while (i < expression.length() && bracketCount > 0) {
                         char ch = expression.charAt(i++);
                         if (ch == '(') bracketCount++;
@@ -41,9 +40,9 @@ public class ExpressionEvaluator {
                         if (bracketCount > 0) argBuilder.append(ch);
                     }
                     double arg = evaluate(argBuilder.toString(), variables);
-                    numbers.push(applyFunction(name, arg));
+                    numbers.push(applyFunction(name, arg)); 
                 } else if (variables.containsKey(name)) {
-                    numbers.push(variables.get(name));
+                    numbers.push(variables.get(name)); 
                 } else {
                     throw new IllegalArgumentException("Unknown variable or function: " + name);
                 }
