@@ -12,9 +12,21 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * Сервис для чтения данных о сотрудниках из CSV-файла.
+ */
 public class CsvReaderService {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+    /**
+     * Читает данные о сотрудниках из CSV-файла.
+     *
+     * @param csvFilePath путь к CSV-файлу в ресурсах
+     * @param separator   разделитель полей в CSV-файле
+     * @return список сотрудников
+     * @throws IOException  если произошла ошибка ввода-вывода
+     * @throws CsvException если произошла ошибка парсинга CSV
+     */
     public List<Person> readPeopleFromCsv(String csvFilePath, char separator)
             throws IOException, CsvException {
 
@@ -35,7 +47,7 @@ public class CsvReaderService {
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
                 if (nextLine.length < 6)
-                    continue; 
+                    continue;
 
                 Person person = parsePerson(nextLine, departments);
                 people.add(person);
@@ -45,6 +57,13 @@ public class CsvReaderService {
         return people;
     }
 
+    /**
+     * Преобразует массив строк из CSV в объект Person.
+     *
+     * @param data        массив строк с данными о сотруднике
+     * @param departments словарь подразделений для избежания дублирования
+     * @return объект Person
+     */
     private Person parsePerson(String[] data, Map<String, Department> departments) {
         int id = Integer.parseInt(data[0]);
         String name = data[1];
