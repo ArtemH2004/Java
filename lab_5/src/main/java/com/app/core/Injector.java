@@ -9,13 +9,13 @@ import java.io.IOException;
 public class Injector {
     private Properties properties;
 
-    public Injector() {
+    public Injector(String configFileName) {
         properties = new Properties();
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("injector.properties")) {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(configFileName)) {
             if (input != null) {
                 properties.load(input);
             } else {
-                throw new RuntimeException("File injector.properties not found in classpath");
+                throw new RuntimeException("File " + configFileName + " not found in classpath");
             }
         } catch (IOException error) {
             throw new RuntimeException("Error loading settings file", error);
@@ -24,18 +24,19 @@ public class Injector {
 
     public <T> T inject(T object) {
         Class<?> clazz = object.getClass();
-        
+
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(AutoInjectable.class)) {
                 Class<?> fieldType = field.getType();
                 String implementationClassName = properties.getProperty(fieldType.getName());
-                
+
                 if (implementationClassName == null) {
                     throw new RuntimeException("No implementation found for interface " + fieldType.getName());
                 }
-                
+
                 try {
-                    Object implementationInstance = Class.forName(implementationClassName).getDeclaredConstructor().newInstance();
+                    Object implementationInstance = Class.forName(implementationClassName).getDeclaredConstructor()
+                            .newInstance();
                     field.setAccessible(true);
                     field.set(object, implementationInstance);
                 } catch (Exception error) {
@@ -43,7 +44,7 @@ public class Injector {
                 }
             }
         }
-        
+
         return object;
     }
 }

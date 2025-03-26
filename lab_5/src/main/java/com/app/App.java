@@ -5,7 +5,7 @@ import com.app.example.SomeBean;
 
 public class App {
     public static void main(String[] args) {
-        SomeBean sb = new Injector().inject(new SomeBean());
+        SomeBean sb = new Injector("injector-bc.properties").inject(new SomeBean());
         sb.foo();
     }
 }
