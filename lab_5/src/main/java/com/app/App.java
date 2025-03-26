@@ -1,13 +1,11 @@
 package com.app;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import com.app.core.Injector;
+import com.app.example.SomeBean;
+
+public class App {
+    public static void main(String[] args) {
+        SomeBean sb = new Injector().inject(new SomeBean());
+        sb.foo();
     }
 }
