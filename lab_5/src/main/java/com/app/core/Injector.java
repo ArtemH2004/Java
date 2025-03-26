@@ -6,9 +6,21 @@ import java.util.Properties;
 import java.io.InputStream;
 import java.io.IOException;
 
+/**
+ * Контейнер для внедрения зависимостей.
+ * Осуществляет автоматическое внедрение реализаций в поля, помеченные
+ * аннотацией @AutoInjectable,
+ * на основе конфигурации из properties-файла.
+ */
 public class Injector {
     private Properties properties;
 
+    /**
+     * Создает экземпляр Injector с загрузкой конфигурации из указанного файла.
+     * 
+     * @param configFileName имя файла конфигурации в classpath
+     * @throws RuntimeException если файл не найден или произошла ошибка загрузки
+     */
     public Injector(String configFileName) {
         properties = new Properties();
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(configFileName)) {
@@ -22,6 +34,15 @@ public class Injector {
         }
     }
 
+    /**
+     * Внедряет зависимости в переданный объект.
+     * 
+     * @param object объект для внедрения зависимостей
+     * @return объект с внедренными зависимостями
+     * @param <T> тип объекта
+     * @throws RuntimeException если не найдена реализация интерфейса или произошла
+     *                          ошибка внедрения
+     */
     public <T> T inject(T object) {
         Class<?> clazz = object.getClass();
 
